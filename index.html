@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PromptScope — AI Prompt Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- TOAST CONTAINER -->
+<div id="toastContainer"></div>
+
+<!-- AUTH OVERLAY -->
+<div id="authOverlay" class="auth-overlay hidden">
+  <div class="auth-card">
+    <div class="auth-logo">PromptScope</div>
+
+    <!-- LOGIN FORM -->
+    <div id="loginForm" class="auth-form">
+      <h2>Welcome back</h2>
+      <p class="auth-sub">Sign in to continue analyzing prompts</p>
+      <div class="field-group">
+        <label>Email</label>
+        <input type="email" id="loginEmail" placeholder="you@example.com"/>
+      </div>
+      <div class="field-group">
+        <label>Password</label>
+        <input type="password" id="loginPassword" placeholder="••••••••"/>
+      </div>
+      <button class="btn-primary" onclick="handleLogin()">Sign In</button>
+      <p class="auth-switch">No account? <span onclick="showSignup()">Create one →</span></p>
+    </div>
+
+    <!-- SIGNUP FORM -->
+    <div id="signupForm" class="auth-form hidden">
+      <h2>Create account</h2>
+      <p class="auth-sub">Start analyzing your prompts today</p>
+      <div class="field-group">
+        <label>Full Name</label>
+        <input type="text" id="signupName" placeholder="Jane Doe"/>
+      </div>
+      <div class="field-group">
+        <label>Email</label>
+        <input type="email" id="signupEmail" placeholder="you@example.com"/>
+      </div>
+      <div class="field-group">
+        <label>Password</label>
+        <input type="password" id="signupPassword" placeholder="Min 6 characters"/>
+      </div>
+      <div class="field-group">
+        <label>Confirm Password</label>
+        <input type="password" id="signupConfirm" placeholder="••••••••"/>
+      </div>
+      <button class="btn-primary" onclick="handleSignup()">Create Account</button>
+      <p class="auth-switch">Already have an account? <span onclick="showLogin()">Sign in →</span></p>
+    </div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar" class="navbar">
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="showPage('home')">PromptScope</div>
+    <ul class="nav-links">
+      <li><a href="#" onclick="showPage('home')" data-page="home">Home</a></li>
+      <li><a href="#" onclick="showPage('analyzer')" data-page="analyzer">Analyzer</a></li>
+      <li><a href="#" onclick="showPage('history')" data-page="history">History</a></li>
+      <li><a href="#" onclick="showPage('about')" data-page="about">About</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+        <span id="themeIcon">☀️</span>
+      </button>
+      <div id="navUser" class="nav-user hidden">
+        <span id="navUserName"></span>
+        <button class="btn-logout" onclick="handleLogout()">Logout</button>
+      </div>
+      <div id="navGuest">
+        <button class="btn-login-nav" onclick="showAuth()">Login</button>
+      </div>
+    </div>
+    <button class="hamburger" onclick="toggleMobileMenu()" id="hamburger">☰</button>
+  </div>
+  <!-- Mobile Menu -->
+  <div class="mobile-menu hidden" id="mobileMenu">
+    <a href="#" onclick="showPage('home');closeMobileMenu()">Home</a>
+    <a href="#" onclick="showPage('analyzer');closeMobileMenu()">Analyzer</a>
+    <a href="#" onclick="showPage('history');closeMobileMenu()">History</a>
+    <a href="#" onclick="showPage('about');closeMobileMenu()">About</a>
+  </div>
+</nav>
+
+<!-- ===================== HOME PAGE ===================== -->
+<section id="page-home" class="page active">
+
+  <div class="hero">
+    <div class="hero-badge">AI-Powered Analysis</div>
+    <h1 class="hero-title">Understand &amp; Improve<br/><em>Your Prompts</em></h1>
+    <p class="hero-sub">Analyze clarity, detect ambiguity, and refine your prompts with structured AI feedback. Write better, communicate faster.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showPage('analyzer')">Analyze a Prompt →</button>
+      <button class="btn-ghost" onclick="showPage('about')">Learn More</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><strong>3</strong><span>Metrics Scored</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><strong>∞</strong><span>Prompts Analyzed</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><strong>100%</strong><span>Free to Use</span></div>
+    </div>
+  </div>
+
+  <div class="features-section">
+    <div class="section-label">Features</div>
+    <h2 class="section-title">Everything you need to craft perfect prompts</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3>Prompt Analysis</h3>
+        <p>Deep evaluation across three key dimensions: clarity, specificity, and ambiguity. Get a comprehensive score instantly.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>Ambiguity Detection</h3>
+        <p>Automatically highlight vague words and unclear phrases in your prompts with color-coded visual feedback.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✨</div>
+        <h3>Smart Suggestions</h3>
+        <p>Receive an improved version of your prompt with AI-driven rewrites that are clearer and more specific.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📜</div>
+        <h3>History Tracking</h3>
+        <p>Every analyzed prompt is stored locally. Review, re-analyze, or delete entries from your personal history log.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <h2>Ready to write better prompts?</h2>
+    <p>Start analyzing for free — no signup required to try it out.</p>
+    <button class="btn-primary large" onclick="showPage('analyzer')">Get Started →</button>
+  </div>
+
+</section>
+
+<!-- ===================== ANALYZER PAGE ===================== -->
+<section id="page-analyzer" class="page">
+
+  <div class="analyzer-header">
+    <h1>Prompt Analyzer</h1>
+    <p>Paste your prompt below and receive instant multi-dimensional feedback</p>
+  </div>
+
+  <div class="analyzer-layout">
+    <!-- LEFT: Input -->
+    <div class="analyzer-left">
+      <div class="input-card">
+        <div class="input-header">
+          <span class="input-label">Your Prompt</span>
+          <span id="charCount" class="char-count">0 / 2000</span>
+        </div>
+        <textarea
+          id="promptInput"
+          placeholder="Enter your prompt here... e.g., 'Explain something about AI'"
+          maxlength="2000"
+          oninput="onPromptInput()"
+        ></textarea>
+        <div id="highlightedPrompt" class="highlighted-prompt hidden"></div>
+        <div class="input-footer">
+          <button class="btn-secondary" onclick="clearPrompt()">Clear</button>
+          <button class="btn-primary" onclick="analyzePrompt()" id="analyzeBtn">
+            <span>Analyze Prompt</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Real-time preview -->
+      <div class="realtime-panel" id="realtimePanel">
+        <div class="rt-header">Live Preview</div>
+        <div class="rt-meters">
+          <div class="rt-meter">
+            <span>Clarity</span>
+            <div class="rt-bar-track"><div id="rtClarity" class="rt-bar" style="width:0%"></div></div>
+            <span id="rtClarityVal">—</span>
+          </div>
+          <div class="rt-meter">
+            <span>Specificity</span>
+            <div class="rt-bar-track"><div id="rtSpecificity" class="rt-bar" style="width:0%"></div></div>
+            <span id="rtSpecificityVal">—</span>
+          </div>
+          <div class="rt-meter">
+            <span>Ambiguity</span>
+            <div class="rt-bar-track"><div id="rtAmbiguity" class="rt-bar" style="width:0%"></div></div>
+            <span id="rtAmbiguityVal">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Results -->
+    <div class="analyzer-right">
+      <div id="resultsPanel" class="results-panel">
+        <div class="results-placeholder">
+          <div class="placeholder-icon">🧠</div>
+          <p>Analysis results will appear here after you click <strong>Analyze Prompt</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ===================== HISTORY PAGE ===================== -->
+<section id="page-history" class="page">
+
+  <div class="history-header">
+    <div>
+      <h1>Analysis History</h1>
+      <p>Your previously analyzed prompts, stored locally</p>
+    </div>
+    <button class="btn-danger" onclick="clearAllHistory()">Clear All</button>
+  </div>
+
+  <div id="historyList" class="history-list">
+    <!-- Populated by JS -->
+  </div>
+
+</section>
+
+<!-- ===================== ABOUT PAGE ===================== -->
+<section id="page-about" class="page">
+
+  <div class="about-hero">
+    <h1>About PromptScope</h1>
+    <p>Understanding the art and science of prompt engineering</p>
+  </div>
+
+  <div class="about-grid">
+    <div class="about-card">
+      <div class="about-icon">📝</div>
+      <h3>What is Prompt Engineering?</h3>
+      <p>Prompt engineering is the practice of crafting precise, clear, and well-structured inputs to AI models in order to get the most accurate, useful, and relevant responses possible.</p>
+      <p>A well-engineered prompt is specific about context, defines the task clearly, avoids vague language, and provides enough information for the AI to understand intent without ambiguity.</p>
+    </div>
+    <div class="about-card">
+      <div class="about-icon">⚡</div>
+      <h3>Why Prompt Quality Matters</h3>
+      <p>The quality of the output from any AI system is directly proportional to the quality of the input. Vague or poorly structured prompts lead to generic, off-target, or unhelpful responses.</p>
+      <p>Clear, specific prompts reduce back-and-forth, save time, and dramatically improve the relevance of AI-generated content — whether for writing, coding, analysis, or creative work.</p>
+    </div>
+    <div class="about-card">
+      <div class="about-icon">🔬</div>
+      <h3>How PromptScope Evaluates</h3>
+      <p><strong>Clarity (0–100):</strong> Measures sentence structure, length, and readability. Shorter, well-structured sentences score higher.</p>
+      <p><strong>Specificity (0–100):</strong> Detects vague filler words ("something", "etc", "maybe") and rewards precise, detail-rich language.</p>
+      <p><strong>Ambiguity (0–100):</strong> Checks for unclear references, missing context clues, and double meanings that could confuse an AI system.</p>
+    </div>
+    <div class="about-card">
+      <div class="about-icon">💡</div>
+      <h3>Scoring System</h3>
+      <p>Each dimension is scored from 0 to 100. The <strong>overall score</strong> is a weighted average:</p>
+      <ul>
+        <li>Clarity — 35%</li>
+        <li>Specificity — 40%</li>
+        <li>Ambiguity — 25%</li>
+      </ul>
+      <p>Scores above 75 are considered "Good". Above 90 is "Excellent". Below 50 triggers detailed improvement suggestions.</p>
+    </div>
+  </div>
+
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
